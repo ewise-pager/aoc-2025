@@ -41,11 +41,6 @@ Run directly with Node.js native TypeScript support:
 npm run dev
 ```
 
-With file watching (reruns on changes):
-```bash
-npm run dev:watch
-```
-
 ### Production Mode (Optimized)
 Build and run the bundled version:
 ```bash
