@@ -22,7 +22,7 @@ export abstract class Solution {
       );
     }
 
-    const inputPath = join(process.cwd(), 'src', 'inputs', `day${this.dayNumber}`, 'input.txt');
+    const inputPath = join(process.cwd(), 'src', 'inputs', `day${this.dayNumber.toString().padStart(2, '0')}`, 'input.txt');
 
     try {
       this.input = await readFile(inputPath, 'utf-8');
