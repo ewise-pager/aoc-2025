@@ -1,0 +1,26 @@
+{
+  "name": "aoc-base",
+  "version": "1.0.0",
+  "description": "Base repository for Advent of Code solutions in TypeScript",
+  "type": "module",
+  "main": "dist/bundle.js",
+  "engines": {
+    "node": ">=25.0.0"
+  },
+  "scripts": {
+    "dev": "node src/main.ts",
+    "build": "node build.mjs",
+    "build:watch": "node build.mjs --watch",
+    "start": "node dist/bundle.js"
+  },
+  "keywords": [
+    "advent-of-code",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}
+
