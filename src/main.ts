@@ -2,6 +2,19 @@ import { solutions } from './solutions/index.ts';
 import { Solution } from './solutions/Solution.ts';
 import { performance } from 'perf_hooks';
 
+// ANSI Color Codes
+const Colors = {
+  reset: '\x1b[0m',
+  bold: '\x1b[1m',
+  invert: '\x1b[7m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  brightRed: '\x1b[91m',
+  brightGreen: '\x1b[92m',
+  brightYellow: '\x1b[93m',
+};
+
 function formatDuration(elapsed: number): string {
   if (elapsed < 1) {
     return `${(1000 * elapsed).toFixed(2)}µs`;
@@ -10,6 +23,82 @@ function formatDuration(elapsed: number): string {
   } else {
     return `${(elapsed / 1000).toFixed(2)}s`;
   }
+}
+
+function colorizePerformance(elapsed: number): string {
+  const duration = formatDuration(elapsed);
+  
+  if (elapsed < 1) {
+    // < 1ms: Green
+    return `${Colors.green}${duration}${Colors.reset}`;
+  } else if (elapsed < 100) {
+    // 1-100ms: Normal (no color)
+    return duration;
+  } else if (elapsed < 1000) {
+    // 100-1000ms: Yellow
+    return `${Colors.yellow}${duration}${Colors.reset}`;
+  } else {
+    // > 1000ms: Red
+    return `${Colors.red}${duration}${Colors.reset}`;
+  }
+}
+
+const TOP_BANNER = (() => {
+  let str = '';
+  for (let i = 0; i < 80; i++) {
+    if (i % 2 === 0) {
+      str += Colors.brightRed;
+    } else {
+      str += Colors.brightGreen;
+    }
+    if (i === 0) {
+      str += '╔';
+    } else if (i === 79) {
+      str += '╗';
+    } else {
+      str += '═';
+    }
+    str += Colors.reset;
+  }
+  return str;
+})();
+
+const BOTTOM_BANNER = (() => {
+  let str = '';
+  for (let i = 0; i < 80; i++) {
+    if (i % 2 === 0) {
+      str += Colors.brightRed;
+    } else {
+      str += Colors.brightGreen;
+    }
+    if (i === 0) {
+      str += '╚';
+    } else if (i === 79) {
+      str += '╝';
+    } else {
+      str += '═';
+    }
+  }
+  str += Colors.reset;
+  return str;
+})();
+
+function printBanner(): void {
+  const bannerWidth = 80;
+  const title = '🎄 ⭐ Advent of Code Solutions ⭐ 🎄';
+  const titlePlainLength = 24; // "Advent of Code Solutions"
+  const emojisApproxWidth = 12; // Approximate width of emojis in the title
+  const totalContentWidth = titlePlainLength + emojisApproxWidth;
+  const leftPadding = Math.floor((bannerWidth - 2 - totalContentWidth) / 2);
+  const rightPadding = bannerWidth - 2 - totalContentWidth - leftPadding;
+  
+  // Alternating red and green borders in a candy cane pattern
+  console.log(TOP_BANNER);
+  console.log(`${Colors.brightGreen}║${Colors.reset}${' '.repeat(bannerWidth - 2)}${Colors.brightRed}║${Colors.reset}`);
+  console.log(`${Colors.brightRed}║${Colors.reset}${' '.repeat(leftPadding)}${Colors.brightYellow}${title}${Colors.reset}${' '.repeat(rightPadding)}${Colors.brightGreen}║${Colors.reset}`);
+  console.log(`${Colors.brightGreen}║${Colors.reset}${' '.repeat(bannerWidth - 2)}${Colors.brightRed}║${Colors.reset}`);
+  console.log(BOTTOM_BANNER);
+  console.log('');
 }
 
 async function runSolution(solution: Solution): Promise<number> {
@@ -55,24 +144,23 @@ async function runSolution(solution: Solution): Promise<number> {
   const totalElapsed = part1Elapsed + part2Elapsed;
 
   if (part1Result !== null || part2Result !== null) {
-    console.log(`${dayName}:`);
+    // Day label with inverted colors, followed by colored time
+    console.log(`${Colors.invert}${Colors.bold} ${dayName} ${Colors.reset} ${colorizePerformance(totalElapsed)}`);
 
     if (part1Result !== null) {
-      console.log(`  Part 1: ${part1Result} (${formatDuration(part1Elapsed)})`);
+      console.log(`├─ Part 1: ${part1Result} (${formatDuration(part1Elapsed)})`);
     }
 
     if (part2Result !== null) {
-      console.log(`  Part 2: ${part2Result} (${formatDuration(part2Elapsed)})`);
+      console.log(`└─ Part 2: ${part2Result} (${formatDuration(part2Elapsed)})`);
     }
-
-    console.log(`  Total: ${formatDuration(totalElapsed)}`);
   }
 
   return totalElapsed;
 }
 
 async function main() {
-  console.log('🎄 Advent of Code Solutions\n');
+  printBanner();
 
   let totalElapsed = 0;
   for (const solution of solutions) {
@@ -80,7 +168,9 @@ async function main() {
     totalElapsed += elapsed;
     console.log('');
   }
-  console.log(`All solutions: ${formatDuration(totalElapsed)}`);
+  
+  // Final summary with styling
+  console.log(`${Colors.bold}❄️  All solutions: ${colorizePerformance(totalElapsed)}${Colors.reset}`);
 }
 
 await main();
