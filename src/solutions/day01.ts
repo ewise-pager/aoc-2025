@@ -12,4 +12,3 @@ export class Day01 extends Solution {
     return this.input.length.toString();
   }
 }
-
