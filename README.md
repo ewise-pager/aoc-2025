@@ -8,6 +8,9 @@ A base repository for solving Advent of Code puzzles in TypeScript using Node.js
 - 📁 Automatic input file reading
 - 🚀 Run directly with Node.js type stripping or bundle with esbuild
 - 📝 TypeScript with strict mode enabled
+- 🎯 CLI support to run all days or a specific day
+- ⏱️ Automatic performance timing with color-coded output
+- 🎨 Festive terminal UI with candy cane borders
 
 ## Prerequisites
 
@@ -21,7 +24,7 @@ A base repository for solving Advent of Code puzzles in TypeScript using Node.js
    ```
 
 2. **Add your puzzle input:**
-   - Create a directory for each day: `src/inputs/day1/`, `src/inputs/day2/`, etc.
+   - Create a directory for each day: `src/inputs/day01/`, `src/inputs/day02/`, etc.
    - Place your puzzle input in `input.txt` within each day's directory
 
 3. **Create a solution:**
@@ -35,22 +38,47 @@ A base repository for solving Advent of Code puzzles in TypeScript using Node.js
 
 ## Running Solutions
 
-### Development Mode (Fast startup)
-Run directly with Node.js native TypeScript support:
+### Run All Days
+Run all implemented solutions with a festive banner and total timing:
+
+**Development Mode (Fast startup):**
 ```bash
 npm run dev
 ```
 
-### Production Mode (Optimized)
-Build and run the bundled version:
+**Production Mode (Optimized):**
 ```bash
 npm run build
 npm start
 ```
 
-Build with file watching:
+### Run a Specific Day
+Run a single day's solution with formatted output (no banner or total time):
+
+**Development Mode:**
+```bash
+node src/main.ts <day>
+# Example: Run day 1
+node src/main.ts 1
+```
+
+**Production Mode:**
+```bash
+npm start -- <day>
+# Example: Run day 5
+npm start -- 5
+```
+
+### Build Options
+Build with file watching for development:
 ```bash
 npm run build:watch
+```
+
+### Help
+View available command line options:
+```bash
+node src/main.ts --help
 ```
 
 ## Example Solution
@@ -79,14 +107,16 @@ export class Day01 extends Solution {
 ```
 aoc-base/
 ├── src/
-│   ├── main.ts              # Entry point
+│   ├── main.ts              # Entry point with CLI
 │   ├── solutions/
 │   │   ├── Solution.ts      # Base class
 │   │   ├── day01.ts         # Example solution
 │   │   └── index.ts         # Solution registry
 │   └── inputs/
-│       └── day1/
+│       └── day01/
 │           └── input.txt    # Puzzle input
+├── dist/
+│   └── bundle.js            # Built output
 ├── package.json
 ├── tsconfig.json
 └── build.mjs                # esbuild configuration
@@ -94,13 +124,15 @@ aoc-base/
 
 ## Tips
 
-- The base `Solution` class reads input files based on your class name (e.g., `Day01` → `day1/input.txt`)
-- Input files must be at `src/inputs/day{N}/input.txt` where N matches your class name
+- The base `Solution` class reads input files based on your class name (e.g., `Day01` → `day01/input.txt`)
+- Input files must be at `src/inputs/day{NN}/input.txt` where NN is the zero-padded day number (e.g., `day01`, `day02`, etc.)
 - Both `runPart1()` and `runPart2()` return `null` by default - implement only what you need
 - Return `null` from a part method to skip printing it (useful for unimplemented parts)
 - Methods are async, so you can use `await` if needed
 - Return values should be strings - convert numbers/objects as needed
 - Input loading is deferred until `loadInput()` is called (handled automatically by main)
+- When running a specific day, the output format is the same as running all days (just without the banner)
+- Performance timing is color-coded: 🟢 green (<1ms), white (1-100ms), 🟡 yellow (100-1000ms), 🔴 red (>1s)
 
 ## Forking and Customization
 
