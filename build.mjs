@@ -10,6 +10,7 @@ const buildOptions = {
   format: 'esm',
   outfile: 'dist/bundle.js',
   sourcemap: true,
+  external: ['commander'],
 };
 
 if (isWatch) {
