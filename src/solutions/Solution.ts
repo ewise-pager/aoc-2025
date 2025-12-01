@@ -40,6 +40,8 @@ export abstract class Solution {
     }
   }
 
+  async parseInput(): Promise<void> {}
+
   async runPart1(): Promise<string | null> {
     return null;
   }

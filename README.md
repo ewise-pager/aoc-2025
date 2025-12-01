@@ -126,6 +126,7 @@ aoc-base/
 
 - The base `Solution` class reads input files based on your class name (e.g., `Day01` → `day01/input.txt`)
 - Input files must be at `src/inputs/day{NN}/input.txt` where NN is the zero-padded day number (e.g., `day01`, `day02`, etc.)
+- Common parsing logic can be implemented in `parseInput` which runs once before parts 1 and 2 - this time will not be counted against you.
 - Both `runPart1()` and `runPart2()` return `null` by default - implement only what you need
 - Return `null` from a part method to skip printing it (useful for unimplemented parts)
 - Methods are async, so you can use `await` if needed

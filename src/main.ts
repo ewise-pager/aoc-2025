@@ -28,7 +28,7 @@ function formatDuration(elapsed: number): string {
 
 function colorizePerformance(elapsed: number): string {
   const duration = formatDuration(elapsed);
-  
+
   if (elapsed < 1) {
     // < 1ms: Green
     return `${Colors.green}${duration}${Colors.reset}`;
@@ -92,12 +92,18 @@ function printBanner(): void {
   const totalContentWidth = titlePlainLength + emojisApproxWidth;
   const leftPadding = Math.floor((bannerWidth - 2 - totalContentWidth) / 2);
   const rightPadding = bannerWidth - 2 - totalContentWidth - leftPadding;
-  
+
   // Alternating red and green borders in a candy cane pattern
   console.log(TOP_BANNER);
-  console.log(`${Colors.brightGreen}║${Colors.reset}${' '.repeat(bannerWidth - 2)}${Colors.brightRed}║${Colors.reset}`);
-  console.log(`${Colors.brightRed}║${Colors.reset}${' '.repeat(leftPadding)}${Colors.brightYellow}${title}${Colors.reset}${' '.repeat(rightPadding)}${Colors.brightGreen}║${Colors.reset}`);
-  console.log(`${Colors.brightGreen}║${Colors.reset}${' '.repeat(bannerWidth - 2)}${Colors.brightRed}║${Colors.reset}`);
+  console.log(
+    `${Colors.brightGreen}║${Colors.reset}${' '.repeat(bannerWidth - 2)}${Colors.brightRed}║${Colors.reset}`
+  );
+  console.log(
+    `${Colors.brightRed}║${Colors.reset}${' '.repeat(leftPadding)}${Colors.brightYellow}${title}${Colors.reset}${' '.repeat(rightPadding)}${Colors.brightGreen}║${Colors.reset}`
+  );
+  console.log(
+    `${Colors.brightGreen}║${Colors.reset}${' '.repeat(bannerWidth - 2)}${Colors.brightRed}║${Colors.reset}`
+  );
   console.log(BOTTOM_BANNER);
   console.log('');
 }
@@ -114,14 +120,20 @@ function printDayResults(
 
   if (part1Result !== null || part2Result !== null) {
     // Day label with inverted colors, followed by colored time
-    console.log(`${Colors.invert}${Colors.bold} ${dayName} ${Colors.reset} ${colorizePerformance(totalElapsed)}`);
+    console.log(
+      `${Colors.invert}${Colors.bold} ${dayName} ${Colors.reset} ${colorizePerformance(totalElapsed)}`
+    );
 
     if (part1Result !== null) {
-      console.log(`├─ Part 1: ${part1Result} (${formatDuration(part1Elapsed)})`);
+      console.log(
+        `├─ Part 1: ${part1Result} (${formatDuration(part1Elapsed)})`
+      );
     }
 
     if (part2Result !== null) {
-      console.log(`└─ Part 2: ${part2Result} (${formatDuration(part2Elapsed)})`);
+      console.log(
+        `└─ Part 2: ${part2Result} (${formatDuration(part2Elapsed)})`
+      );
     }
   }
 }
@@ -132,6 +144,15 @@ async function runSolution(solution: Solution): Promise<number> {
   } catch (error) {
     console.error(
       `Failed to load input for ${solution.constructor.name}: ${error instanceof Error ? error.message : String(error)}`
+    );
+    return 0;
+  }
+
+  try {
+    await solution.parseInput();
+  } catch (error) {
+    console.error(
+      `Failed to parse input for ${solution.constructor.name}: ${error instanceof Error ? error.message : String(error)}`
     );
     return 0;
   }
@@ -166,24 +187,40 @@ async function runSolution(solution: Solution): Promise<number> {
     );
   }
 
-  printDayResults(dayNumber, dayName, part1Result, part1Elapsed, part2Result, part2Elapsed);
+  printDayResults(
+    dayNumber,
+    dayName,
+    part1Result,
+    part1Elapsed,
+    part2Result,
+    part2Elapsed
+  );
 
   return part1Elapsed + part2Elapsed;
 }
 
 async function runSingleDay(dayNumber: number): Promise<void> {
-  const solution = solutions.find(s => s.dayNumber === dayNumber);
-  
+  const solution = solutions.find((s) => s.dayNumber === dayNumber);
+
   if (!solution) {
     console.error(`Error: No solution found for day ${dayNumber}`);
     process.exit(1);
   }
-  
+
   try {
     await solution.loadInput();
   } catch (error) {
     console.error(
       `Failed to load input for day ${dayNumber}: ${error instanceof Error ? error.message : String(error)}`
+    );
+    process.exit(1);
+  }
+
+  try {
+    await solution.parseInput();
+  } catch (error) {
+    console.error(
+      `Failed to parse input for day ${dayNumber}: ${error instanceof Error ? error.message : String(error)}`
     );
     process.exit(1);
   }
@@ -216,7 +253,14 @@ async function runSingleDay(dayNumber: number): Promise<void> {
     );
   }
 
-  printDayResults(dayNumber, dayName, part1Result, part1Elapsed, part2Result, part2Elapsed);
+  printDayResults(
+    dayNumber,
+    dayName,
+    part1Result,
+    part1Elapsed,
+    part2Result,
+    part2Elapsed
+  );
 }
 
 async function runAllDays(): Promise<void> {
@@ -228,9 +272,11 @@ async function runAllDays(): Promise<void> {
     totalElapsed += elapsed;
     console.log('');
   }
-  
+
   // Final summary with styling
-  console.log(`${Colors.bold}❄️  All solutions: ${colorizePerformance(totalElapsed)}${Colors.reset}`);
+  console.log(
+    `${Colors.bold}❄️  All solutions: ${colorizePerformance(totalElapsed)}${Colors.reset}`
+  );
 }
 
 async function main() {
