@@ -328,7 +328,7 @@ async function runAllDays(exampleMode: boolean = false): Promise<void> {
 
 async function main() {
   program
-    .name('aoc-base')
+    .name('aoc-2025')
     .description('Run Advent of Code solutions')
     .argument('[day]', 'Run only a specific day (1-25)')
     .option('-e, --example', 'Use example.txt instead of input.txt', false)
