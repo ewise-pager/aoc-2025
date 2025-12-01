@@ -139,9 +139,11 @@ function printDayResults(
   if (part1Result !== null || part2Result !== null) {
     // Show example mode indicator if applicable
     if (exampleMode) {
-      console.log(`${Colors.yellow}📝 Running in example mode${Colors.reset}\n`);
+      console.log(
+        `${Colors.yellow}📝 Running in example mode${Colors.reset}\n`
+      );
     }
-    
+
     // Day label with inverted colors, followed by colored time
     console.log(
       `${Colors.invert}${Colors.bold} ${dayName} ${Colors.reset} ${colorizePerformance(totalElapsed)}`
@@ -149,7 +151,11 @@ function printDayResults(
 
     if (part1Result !== null) {
       const expected = solution?.exampleAnswer1 || null;
-      const colorizedResult = colorizeAnswer(part1Result, expected, exampleMode);
+      const colorizedResult = colorizeAnswer(
+        part1Result,
+        expected,
+        exampleMode
+      );
       console.log(
         `├─ Part 1: ${colorizedResult} (${formatDuration(part1Elapsed)})`
       );
@@ -157,7 +163,11 @@ function printDayResults(
 
     if (part2Result !== null) {
       const expected = solution?.exampleAnswer2 || null;
-      const colorizedResult = colorizeAnswer(part2Result, expected, exampleMode);
+      const colorizedResult = colorizeAnswer(
+        part2Result,
+        expected,
+        exampleMode
+      );
       console.log(
         `└─ Part 2: ${colorizedResult} (${formatDuration(part2Elapsed)})`
       );
@@ -165,7 +175,10 @@ function printDayResults(
   }
 }
 
-async function runSolution(solution: Solution, exampleMode: boolean = false): Promise<number> {
+async function runSolution(
+  solution: Solution,
+  exampleMode: boolean = false
+): Promise<number> {
   try {
     await solution.loadInput(exampleMode);
   } catch (error) {
@@ -228,7 +241,10 @@ async function runSolution(solution: Solution, exampleMode: boolean = false): Pr
   return part1Elapsed + part2Elapsed;
 }
 
-async function runSingleDay(dayNumber: number, exampleMode: boolean = false): Promise<void> {
+async function runSingleDay(
+  dayNumber: number,
+  exampleMode: boolean = false
+): Promise<void> {
   const solution = solutions.find((s) => s.dayNumber === dayNumber);
 
   if (!solution) {
@@ -318,7 +334,7 @@ async function main() {
     .option('-e, --example', 'Use example.txt instead of input.txt', false)
     .action(async (day?: string, options?: { example: boolean }) => {
       const exampleMode = options?.example ?? false;
-      
+
       if (day) {
         const dayNumber = parseInt(day, 10);
         if (isNaN(dayNumber) || dayNumber < 1 || dayNumber > 25) {
