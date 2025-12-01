@@ -3,5 +3,5 @@ dist/
 *.log
 .DS_Store
 # Please do not check these in, this is against the terms of the challenge.
-src/inputs/
+inputs/
 

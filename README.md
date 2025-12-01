@@ -112,9 +112,9 @@ aoc-base/
 │   │   ├── Solution.ts      # Base class
 │   │   ├── day01.ts         # Example solution
 │   │   └── index.ts         # Solution registry
-│   └── inputs/
-│       └── day01/
-│           └── input.txt    # Puzzle input
+├── inputs/
+│   └── day01/
+│       └── input.txt        # Puzzle input
 ├── dist/
 │   └── bundle.js            # Built output
 ├── package.json
