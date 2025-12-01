@@ -1,7 +1,8 @@
-import { Solution } from './Solution.ts';
-
+import { Solution } from '../lib/Solution.ts';
 export class Day01 extends Solution {
   lines: string[] = [];
+  exampleAnswer1: string = '2';
+  exampleAnswer2: string = '100'; // Intentionally wrong to display error output.
 
   async parseInput(): Promise<void> {
     this.lines = this.input.trim().split('\n');

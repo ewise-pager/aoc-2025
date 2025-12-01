@@ -1,5 +1,5 @@
 import { solutions } from './solutions/index.ts';
-import { Solution } from './solutions/Solution.ts';
+import { Solution } from './lib/Solution.ts';
 import { performance } from 'perf_hooks';
 import { program } from 'commander';
 
@@ -108,6 +108,22 @@ function printBanner(): void {
   console.log('');
 }
 
+function colorizeAnswer(
+  result: string,
+  expected: string | null,
+  exampleMode: boolean
+): string {
+  if (!exampleMode || expected === null) {
+    return result;
+  }
+
+  if (result === expected) {
+    return `${Colors.green}${result}${Colors.reset} ✓`;
+  } else {
+    return `${Colors.red}${result}${Colors.reset} ✗`;
+  }
+}
+
 function printDayResults(
   dayNumber: number | null,
   dayName: string,
@@ -115,6 +131,7 @@ function printDayResults(
   part1Elapsed: number,
   part2Result: string | null,
   part2Elapsed: number,
+  solution: Solution | null = null,
   exampleMode: boolean = false
 ): void {
   const totalElapsed = part1Elapsed + part2Elapsed;
@@ -131,14 +148,18 @@ function printDayResults(
     );
 
     if (part1Result !== null) {
+      const expected = solution?.exampleAnswer1 || null;
+      const colorizedResult = colorizeAnswer(part1Result, expected, exampleMode);
       console.log(
-        `├─ Part 1: ${part1Result} (${formatDuration(part1Elapsed)})`
+        `├─ Part 1: ${colorizedResult} (${formatDuration(part1Elapsed)})`
       );
     }
 
     if (part2Result !== null) {
+      const expected = solution?.exampleAnswer2 || null;
+      const colorizedResult = colorizeAnswer(part2Result, expected, exampleMode);
       console.log(
-        `└─ Part 2: ${part2Result} (${formatDuration(part2Elapsed)})`
+        `└─ Part 2: ${colorizedResult} (${formatDuration(part2Elapsed)})`
       );
     }
   }
@@ -200,6 +221,7 @@ async function runSolution(solution: Solution, exampleMode: boolean = false): Pr
     part1Elapsed,
     part2Result,
     part2Elapsed,
+    solution,
     exampleMode
   );
 
@@ -267,6 +289,7 @@ async function runSingleDay(dayNumber: number, exampleMode: boolean = false): Pr
     part1Elapsed,
     part2Result,
     part2Elapsed,
+    solution,
     exampleMode
   );
 }

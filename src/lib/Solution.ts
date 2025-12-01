@@ -4,6 +4,8 @@ import { join } from 'path';
 export abstract class Solution {
   protected input: string = '';
   private _dayNumber: number | null | undefined = undefined;
+  readonly exampleAnswer1: string | null = null;
+  readonly exampleAnswer2: string | null = null;
 
   // Memoized getter for day number
   get dayNumber(): number | null {
@@ -41,12 +43,15 @@ export abstract class Solution {
     }
   }
 
+  // Override this method to parse the input.
   async parseInput(): Promise<void> {}
 
+  // Override this method to run part 1.
   async runPart1(): Promise<string | null> {
     return null;
   }
 
+  // Override this method to run part 2.
   async runPart2(): Promise<string | null> {
     return null;
   }

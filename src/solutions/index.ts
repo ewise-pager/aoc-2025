@@ -1,4 +1,4 @@
-import { Solution } from './Solution.ts';
+import { Solution } from '../lib/Solution.ts';
 import { Day01 } from './day01.ts';
 
 // Add new day solutions to this array
