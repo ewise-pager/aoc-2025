@@ -1,20 +1,31 @@
 import { Solution } from '../lib/Solution.ts';
 export class Day01 extends Solution {
-  lines: string[] = [];
-  exampleAnswer1: string = '2';
-  exampleAnswer2: string = '100'; // Intentionally wrong to display error output.
+  turns: number[] = [];
 
   async parseInput(): Promise<void> {
-    this.lines = this.input.trim().split('\n');
+    for (const line of this.input.trim().split('\n')) {
+      if (line.startsWith('L')) {
+        this.turns.push(-parseInt(line.slice(1)));
+      } else {
+        this.turns.push(parseInt(line.slice(1)));
+      }
+    }
   }
 
   async runPart1(): Promise<string | null> {
-    // Example: Count the number of lines in the input
-    return this.lines.length.toString();
+    let dial = 50;
+    let zeroCount = 0;
+    for (const turn of this.turns) {
+      dial += turn;
+      dial = dial % 100;
+      if (dial === 0) {
+        zeroCount++;
+      }
+    }
+    return zeroCount.toString();
   }
 
   async runPart2(): Promise<string | null> {
-    // Example: Count the total number of characters
-    return this.input.length.toString();
+    return null;
   }
 }
