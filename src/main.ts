@@ -114,11 +114,17 @@ function printDayResults(
   part1Result: string | null,
   part1Elapsed: number,
   part2Result: string | null,
-  part2Elapsed: number
+  part2Elapsed: number,
+  exampleMode: boolean = false
 ): void {
   const totalElapsed = part1Elapsed + part2Elapsed;
 
   if (part1Result !== null || part2Result !== null) {
+    // Show example mode indicator if applicable
+    if (exampleMode) {
+      console.log(`${Colors.yellow}📝 Running in example mode${Colors.reset}\n`);
+    }
+    
     // Day label with inverted colors, followed by colored time
     console.log(
       `${Colors.invert}${Colors.bold} ${dayName} ${Colors.reset} ${colorizePerformance(totalElapsed)}`
@@ -138,9 +144,9 @@ function printDayResults(
   }
 }
 
-async function runSolution(solution: Solution): Promise<number> {
+async function runSolution(solution: Solution, exampleMode: boolean = false): Promise<number> {
   try {
-    await solution.loadInput();
+    await solution.loadInput(exampleMode);
   } catch (error) {
     console.error(
       `Failed to load input for ${solution.constructor.name}: ${error instanceof Error ? error.message : String(error)}`
@@ -193,13 +199,14 @@ async function runSolution(solution: Solution): Promise<number> {
     part1Result,
     part1Elapsed,
     part2Result,
-    part2Elapsed
+    part2Elapsed,
+    exampleMode
   );
 
   return part1Elapsed + part2Elapsed;
 }
 
-async function runSingleDay(dayNumber: number): Promise<void> {
+async function runSingleDay(dayNumber: number, exampleMode: boolean = false): Promise<void> {
   const solution = solutions.find((s) => s.dayNumber === dayNumber);
 
   if (!solution) {
@@ -208,7 +215,7 @@ async function runSingleDay(dayNumber: number): Promise<void> {
   }
 
   try {
-    await solution.loadInput();
+    await solution.loadInput(exampleMode);
   } catch (error) {
     console.error(
       `Failed to load input for day ${dayNumber}: ${error instanceof Error ? error.message : String(error)}`
@@ -259,16 +266,17 @@ async function runSingleDay(dayNumber: number): Promise<void> {
     part1Result,
     part1Elapsed,
     part2Result,
-    part2Elapsed
+    part2Elapsed,
+    exampleMode
   );
 }
 
-async function runAllDays(): Promise<void> {
+async function runAllDays(exampleMode: boolean = false): Promise<void> {
   printBanner();
 
   let totalElapsed = 0;
   for (const solution of solutions) {
-    const elapsed = await runSolution(solution);
+    const elapsed = await runSolution(solution, exampleMode);
     totalElapsed += elapsed;
     console.log('');
   }
@@ -284,16 +292,19 @@ async function main() {
     .name('aoc-base')
     .description('Run Advent of Code solutions')
     .argument('[day]', 'Run only a specific day (1-25)')
-    .action(async (day?: string) => {
+    .option('-e, --example', 'Use example.txt instead of input.txt', false)
+    .action(async (day?: string, options?: { example: boolean }) => {
+      const exampleMode = options?.example ?? false;
+      
       if (day) {
         const dayNumber = parseInt(day, 10);
         if (isNaN(dayNumber) || dayNumber < 1 || dayNumber > 25) {
           console.error('Error: Day must be a number between 1 and 25');
           process.exit(1);
         }
-        await runSingleDay(dayNumber);
+        await runSingleDay(dayNumber, exampleMode);
       } else {
-        await runAllDays();
+        await runAllDays(exampleMode);
       }
     });
 

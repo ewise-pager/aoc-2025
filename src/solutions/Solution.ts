@@ -15,18 +15,19 @@ export abstract class Solution {
     return this._dayNumber;
   }
 
-  async loadInput(): Promise<void> {
+  async loadInput(exampleMode: boolean = false): Promise<void> {
     if (this.dayNumber === null) {
       throw new Error(
         `Class name "${this.constructor.name}" must follow the pattern "Day01", "Day02", etc.`
       );
     }
 
+    const fileName = exampleMode ? 'example.txt' : 'input.txt';
     const inputPath = join(
       process.cwd(),
       'inputs',
       `day${this.dayNumber.toString().padStart(2, '0')}`,
-      'input.txt'
+      fileName
     );
 
     try {
